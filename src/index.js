@@ -72,28 +72,46 @@ function Header() {
 }
 
 const Menu = function () {
+  const pizzas = pizzaData;
+  // const pizzas = [];
+
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <ul className="pizzas">
-        {/* Here we don't use forEach because here we actually need a JSX and we can do that by creating a new array. So we use map for that since it creates a new array. */}
-        {pizzaData.map((pizza) => (
-          <Pizza pizzaObj={pizza} key={pizza.name} /> //We need to pass a key in react.
-        ))}
-      </ul>
+
+      {/* Here we don't use forEach because here we actually need a JSX and we can do that by creating a new array. So we use map for that since it creates a new array. */}
+      {pizzas.length > 0 ? (
+        // We can write either <></> or <React.Fragment></React.Fragment>
+        <React.Fragment>
+          <p>
+            Authentic Italian cuisine. 6 creative dishes to choose from. All
+            from our stone oven, all organic, all delicious.
+          </p>
+          <ul className="pizzas">
+            {pizzas.map((pizza) => (
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </React.Fragment>
+      ) : (
+        <p>W're still working on our menu. Please come again later!</p>
+      )}
     </main>
   );
 };
 
-function Pizza(props) {
-  console.log(props.pizzaObj);
+function Pizza({ pizzaObj }) {
+  console.log(pizzaObj);
+
+  // if (pizzaObj.soldOut) return null;
+
   return (
-    <div className="pizza">
-      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+    <div className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
-        <h3>{props.pizzaObj.name}</h3>
-        <p>{props.pizzaObj.ingredients}</p>
-        <span>{+props.pizzaObj.price}</span>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        <span>{pizzaObj.soldOut ? "SOLD OUT" : +pizzaObj.price}</span>
       </div>
     </div>
   );
@@ -102,18 +120,35 @@ function Pizza(props) {
 const Footer = () => {
   const hours = new Date().getHours();
   const openHour = 12;
-  const closeHour = 22;
+  const closeHour = 23;
   const isOpen = hours >= openHour && hours <= closeHour;
   // console.log(isOpen);
 
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()} We're currently{" "}
-      {isOpen ? "open" : "closed"}!
+      {isOpen ? (
+        <Order closeHours={closeHour} openHours={openHour} />
+      ) : (
+        <p>
+          We're happy to host you between {openHour}:00 and {closeHour}:00
+        </p>
+      )}
     </footer>
   );
   // return React.createElement("footer", null, "We're currently open");
 };
+
+function Order({ closeHours, openHours }) {
+  return (
+    <div className="order">
+      <p>
+        We're open from {openHours}:00 to {closeHours}:00. Come visit us or
+        order online.
+      </p>
+      <button className="btn">Order</button>
+    </div>
+  );
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
