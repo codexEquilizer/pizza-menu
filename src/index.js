@@ -75,32 +75,25 @@ const Menu = function () {
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <Pizza
-        name="Pizza Spinaci"
-        ingredients="Tomato, mozarella, spinach, and ricotta cheese"
-        photoName="pizzas/spinaci.jpg"
-        price="10"
-      />
-
-      <Pizza
-        name="Pizza Funghi"
-        ingredients="Tomato, mushrooms, blue cheese"
-        photoName="pizzas/funghi.jpg"
-        price="12"
-      />
+      <ul className="pizzas">
+        {/* Here we don't use forEach because here we actually need a JSX and we can do that by creating a new array. So we use map for that since it creates a new array. */}
+        {pizzaData.map((pizza) => (
+          <Pizza pizzaObj={pizza} key={pizza.name} /> //We need to pass a key in react.
+        ))}
+      </ul>
     </main>
   );
 };
 
 function Pizza(props) {
-  console.log(props);
+  console.log(props.pizzaObj);
   return (
     <div className="pizza">
-      <img src={props.photoName} alt={props.name} />
+      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
       <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredients}</p>
-        <span>{+props.price}</span>
+        <h3>{props.pizzaObj.name}</h3>
+        <p>{props.pizzaObj.ingredients}</p>
+        <span>{+props.pizzaObj.price}</span>
       </div>
     </div>
   );
