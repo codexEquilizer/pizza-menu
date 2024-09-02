@@ -73,18 +73,26 @@ function Header() {
 
 const Menu = function () {
   const pizzas = pizzaData;
+  // const pizzas = [];
 
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      {/* Here we don't use forEach because here we actually need a JSX and we can do that by creating a new array. So we use map for that since it creates a new array. */}
 
+      {/* Here we don't use forEach because here we actually need a JSX and we can do that by creating a new array. So we use map for that since it creates a new array. */}
       {pizzas.length > 0 ? (
-        <ul className="pizzas">
-          {pizzas.map((pizza) => (
-            <Pizza pizzaObj={pizza} key={pizza.name} />
-          ))}
-        </ul>
+        // We can write either <></> or <React.Fragment></React.Fragment>
+        <React.Fragment>
+          <p>
+            Authentic Italian cuisine. 6 creative dishes to choose from. All
+            from our stone oven, all organic, all delicious.
+          </p>
+          <ul className="pizzas">
+            {pizzas.map((pizza) => (
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </React.Fragment>
       ) : (
         <p>W're still working on our menu. Please come again later!</p>
       )}
@@ -95,15 +103,15 @@ const Menu = function () {
 function Pizza({ pizzaObj }) {
   console.log(pizzaObj);
 
-  if (pizzaObj.soldOut) return null;
+  // if (pizzaObj.soldOut) return null;
 
   return (
-    <div className="pizza">
+    <div className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
       <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
         <h3>{pizzaObj.name}</h3>
         <p>{pizzaObj.ingredients}</p>
-        <span>{+pizzaObj.price}</span>
+        <span>{pizzaObj.soldOut ? "SOLD OUT" : +pizzaObj.price}</span>
       </div>
     </div>
   );
